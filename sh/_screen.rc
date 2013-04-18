@@ -1,0 +1,23 @@
+# ~/.screenrc
+autodetach on
+nonblock on
+defutf8 on
+defscrollback 10000
+vbell off
+vbell_msg "Bell on %t (%n)"
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.bW}%-w%{.rY}%n %t%{-}%+w %=%{..G} %H(%l) %{..Y} %Y/%m/%d %c:%s "
+vbell off
+screen -t shell 0
+screen -t vim 1
+##
+## 按 Ctrl-Z w 或 Ctrl-Z Ctrl-W 显示窗口列表
+#bind w windowlist -b
+#bind ^w windowlist -b
+##
+## 定义screen的功能键为Ctrl-Z。向终端输入Ctrl-Z时应按 Ctrl-Z z。
+#escape ^Zz
+defflow off
+#escape ^Zz
+
