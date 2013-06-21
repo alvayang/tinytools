@@ -10,6 +10,10 @@
      4. 在3的基础上，修改这些对应的recordid所对应的ip地址为1中获取的值
 
 
+* Deps:
+   
+   tornado, cjson, BeautifulSoup
+
 * Test@ ubuntu 12.10  3.5.0-34-generic #55-Ubuntu SMP Thu Jun 6 20:20:19 UTC 2013 i686 i686 i686 GNU/Linux
 
 * @author alvayang <netyang@gmail.com>
