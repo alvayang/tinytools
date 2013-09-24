@@ -11,27 +11,35 @@
 
 
 ARGC=("$#")
-DEBUG=$6
+DEBUG=$7
 
-if [ ! $HBASE_BIN ]
+function usage(){
+echo "$0 TABLE_NAME [TimesAgo(minute)] [KeyPrefix] [ValuePart] [HBASE_BIN] [SLEEP SEC] [DEBUG]"
+}
+
+if [ $ARGC -lt 1 ]
 then
-if [ $4 ]
-then
-HBASE_BIN=$4
-else
-HBASE_BIN=/usr/local/hbase/bin
+usage
+exit
 fi
-fi
+
+TABLENAME=$1
 
 if [ $DEBUG > 0 ]
 then
 echo $HBASE_BIN
 fi
 
+if [ ! $HBASE_BIN ]
+then
+if [ $5 ]
+then
+HBASE_BIN=$5
+else
+HBASE_BIN=/usr/local/hbase/bin
+fi
+fi
 
-function usage(){
-echo "$0 [TimesAgo(minute)] [KeyPrefix] [ValuePart] [HBASE_BIN] [SLEEP SEC] [DEBUG]"
-}
 
 if [ ! -f $HBASE_BIN/hbase ]
 then
@@ -41,32 +49,32 @@ exit
 fi
 
 
-if [[ "$1" =~ "^[0-9]+$" ]]
+if [[ "$2" =~ "^[0-9]+$" ]]
 then
-START_MIN=$1
+START_MIN=$2
 else
 START_MIN=0
 fi
 
 
 
-if [ $2 ]
+if [ $3 ]
 then
-DATA_PREFIX=$2
+DATA_PREFIX=$3
 else
 DATA_PREFIX=""
 fi
 
-if [ $3 ]
+if [ $4 ]
 then
-DATA_CHANNEL=$3
+DATA_CHANNEL=$4
 else
 DATA_CHANNEL=""
 fi
 
-if [ $5 ]
+if [ $6 ]
 then
-SLEEP_TIME=$5
+SLEEP_TIME=$6
 else
 SLEEP_TIME=5
 fi
@@ -78,7 +86,7 @@ DATE_START=$DATE_START"000"
 
 while [ 1 > 0 ]
 do
-echo "scan 'coologger_data' ,{FILTER => \"(PrefixFilter('$DATA_PREFIX') AND (QualifierFilter(=,'substring:$DATA_CHANNEL'))\", TIMERANGE=>[$DATE_START, 9999999999999]}" |$HBASE_BIN/hbase shell
+echo "scan '$TABLENAME' ,{FILTER => \"(PrefixFilter('$DATA_PREFIX') AND (QualifierFilter(=,'substring:$DATA_CHANNEL'))\", TIMERANGE=>[$DATE_START, 9999999999999]}" |$HBASE_BIN/hbase shell
 TMP_DATE=`date '+%s'`
 sleep $SLEEP_TIME
 DATE_START=$TMP_DATE"000"
